@@ -1,4 +1,4 @@
-import { IsInt, IsString, Min, Max, MinLength, MaxLength } from "class-validator";
+import { IsInt, IsString, Min, Max, MinLength, MaxLength, IsNotEmpty } from "class-validator";
 
 export class CreateUserDto {
     @IsInt()
@@ -10,4 +10,7 @@ export class CreateUserDto {
     @MinLength(3)
     @MaxLength(15)
     username: string; // string & >3 <15
+
+    @IsNotEmpty()
+    mobile: string;
 } 
