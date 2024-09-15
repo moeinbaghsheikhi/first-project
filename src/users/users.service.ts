@@ -1,95 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto/create-user.dto';
 import { UpdateUserDto } from './dto/create-user.dto/update-user.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-    private users : any[] = [
-        {
-            id: 1,
-            username: "moein"
-        },
-        {
-            id: 2,
-            username: "amir"
-        },
-        {
-            id: 3,
-            username: "ali"
-        },
-    ]
+    constructor (
+        @InjectRepository(User)
+        private userRepository: Repository<User>
+    ){}
 
-    getAll(): object {
-        return {
-            data: this.users,
-            statusCode: 200,
-            message: "Get all users!"
-        }
+    getAll(): Promise<User[]> {
+        return this.userRepository.find()
     }
 
-    getById(id : number): object {
-        let findUser = null
-
-        for(const user of this.users){
-            if(user.id == id) 
-                findUser = user
-        }
-
-        return {
-            data: findUser,
-            statusCode: 200,
-            message: "Get user!"
-        }
+    getById(id : number): Promise<User> {
+       return this.userRepository.findOneBy({ id })
     }
 
-    createUser(createUserDto: CreateUserDto): object{
-        if(createUserDto){
-            this.users.push(createUserDto)
-        }
-
-        return {
-            data: this.users,
-            statusCode: 200,
-            message: "created User! send users list"
-        }
+    async createUser(createUserDto: CreateUserDto): Promise<User>{
+        const newUser = this.userRepository.create(createUserDto);
+        return await this.userRepository.save(newUser)
     }
 
-    updateUser(id: number, updateUserDto: UpdateUserDto){
-        let findUser = null
-
-        for(const user of this.users){
-            if(user.id == id) 
-                findUser = user
-        }
-
-        if(findUser){
-            findUser.username = updateUserDto.username
-            
-            return {
-                data: findUser,
-                statusCode: 200,
-                message: "user Update!"
-            }
-        } 
-        else return {
-            data: null,
-            statusCode: 400,
-            message: "id is not define!"
-        }
+    updateUser(id: number, updateUserDto: UpdateUserDto): Promise<object>{
+        return this.userRepository.update(id, updateUserDto)
     }
 
-    deleteUser(id : number): object {
-        let newUsers: object[] = []
-
-        for(const user of this.users){
-            if(user.id != id) newUsers.push(user)
-        }
-
-        return {
-            data: newUsers,
-            statusCode: 200,
-            message: "Get user!"
-        }
+    deleteUser(id : number): Promise<object> {
+        return this.userRepository.delete(id)
     }
 
 }

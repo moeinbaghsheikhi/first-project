@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
       username: 'root',
       password: '',
       database: 'user_manage',
+      entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
       synchronize: true
     }),
     UsersModule

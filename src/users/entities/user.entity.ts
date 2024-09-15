@@ -8,6 +8,9 @@ export class User {
     @Column()
     name: string;
 
+    @Column()
+    mobile: string;
+
     @Column({ default: false })
     isActive: boolean;
 }

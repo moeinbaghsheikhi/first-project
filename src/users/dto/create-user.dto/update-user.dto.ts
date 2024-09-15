@@ -4,5 +4,5 @@ export class UpdateUserDto {
     @IsString()
     @MinLength(3)
     @MaxLength(15)
-    username: string;
+    name: string;
 }

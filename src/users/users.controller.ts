@@ -21,13 +21,15 @@ export class UsersController {
 
     // Pipe & PipeLine
     @Post()
-    store(@Body(new MobilePipe(5)) createUserDto: CreateUserDto){
+    store(@Body(new MobilePipe(11)) createUserDto: CreateUserDto){
         return this.userService.createUser(createUserDto)
     }
 
     @Put('/:id')
-    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto){
-        return this.userService.updateUser(parseInt(id), updateUserDto)
+    async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto){
+        const updateUser = await this.userService.updateUser(parseInt(id), updateUserDto)
+
+        return null
     }
 
     @Delete('/:id')
